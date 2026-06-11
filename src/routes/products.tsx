@@ -97,7 +97,6 @@ function Category({ id, eyebrow, title, intro, image, children }: {
   );
 }
 
-const tapList = [
 const tapList: Array<[string, string, string?]> = [
   ["Short body tap", "Compact bib tap for wall or pipe mounting. Common in home water supply lines.", longTap],
   ["Long body tap", "Extended body for wall-recessed pipes. Clean finish for home and commercial use.", longTap],
