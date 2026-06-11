@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Droplets, Factory, ShieldCheck, Wrench } from "lucide-react";
-import hero from "@/assets/hero-valves.jpg";
+import heroAsset from "@/assets/hero-banner.jpeg.asset.json";
+const hero = heroAsset.url;
 import ballAsset from "@/assets/pvc-ball-valve.jpeg.asset.json";
 import footAsset from "@/assets/pvc-foot-valve.jpeg.asset.json";
 import tapAsset from "@/assets/two-way-angle-tap.jpeg.asset.json";
