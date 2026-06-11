@@ -62,31 +62,6 @@ function Index() {
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
       </section>
 
-      {/* Quick categories */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { img: ball, title: "Ball Valves", desc: "PVC & UPVC, ½″ to 6″" },
-            { img: foot, title: "Foot & Check Valves", desc: "For borewell & sump pumps" },
-            { img: taps, title: "Taps & Cocks", desc: "Pillar, angle, garden & more" },
-            { img: hero, title: "Union Fittings", desc: "Easy maintenance, all sizes" },
-          ].map((c) => (
-            <Link key={c.title} to="/products" className="group relative overflow-hidden rounded-xl border border-border bg-card transition hover:shadow-elegant">
-              <div className="aspect-[4/3] overflow-hidden bg-muted">
-                <img src={c.img} alt={c.title} loading="lazy" width={600} height={450} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-              </div>
-              <div className="p-5">
-                <h3 className="font-display text-xl tracking-wide">{c.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
-              </div>
-              <div className="absolute right-4 top-4 rounded-full bg-primary/90 p-2 text-primary-foreground opacity-0 transition group-hover:opacity-100">
-                <ArrowRight className="h-4 w-4" />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
       {/* Who are we */}
       <section className="bg-muted/40 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -127,6 +102,38 @@ function Index() {
                   </li>
                 ))}
               </ul>
+            </div>
+          </div>
+
+          {/* Quick categories — nested under Who are we */}
+          <div className="mt-16">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">Our range</p>
+                <h3 className="mt-2 font-display text-2xl tracking-wide md:text-3xl">Ball valves, foot valves, taps & union fittings</h3>
+              </div>
+              <Link to="/products" className="hidden text-sm font-semibold uppercase tracking-wider text-primary hover:underline sm:inline-flex">View all →</Link>
+            </div>
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { img: ball, title: "Ball Valves", desc: "PVC & UPVC, ½″ to 6″" },
+                { img: foot, title: "Foot & Check Valves", desc: "For borewell & sump pumps" },
+                { img: taps, title: "Taps & Cocks", desc: "Pillar, angle, garden & more" },
+                { img: filters, title: "Union Fittings", desc: "Easy maintenance, all sizes" },
+              ].map((c) => (
+                <Link key={c.title} to="/products" className="group relative overflow-hidden rounded-xl border border-border bg-card transition hover:shadow-elegant">
+                  <div className="aspect-[4/3] overflow-hidden bg-white">
+                    <img src={c.img} alt={c.title} loading="lazy" width={600} height={450} className="h-full w-full object-contain p-4 transition duration-500 group-hover:scale-105" />
+                  </div>
+                  <div className="p-5">
+                    <h4 className="font-display text-xl tracking-wide">{c.title}</h4>
+                    <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
+                  </div>
+                  <div className="absolute right-4 top-4 rounded-full bg-primary/90 p-2 text-primary-foreground opacity-0 transition group-hover:opacity-100">
+                    <ArrowRight className="h-4 w-4" />
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
