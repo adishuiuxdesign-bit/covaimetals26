@@ -1,9 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import ball from "@/assets/ball-valves.jpg";
-import foot from "@/assets/foot-valves.jpg";
-import taps from "@/assets/taps.jpg";
-import union from "@/assets/union-valves.jpg";
-import filters from "@/assets/filters.jpg";
+import unionImg from "@/assets/union-valves.jpg";
+import ballAsset from "@/assets/pvc-ball-valve.jpeg.asset.json";
+import footAsset from "@/assets/pvc-foot-valve.jpeg.asset.json";
+import tapAsset from "@/assets/two-way-angle-tap.jpeg.asset.json";
+import filterAsset from "@/assets/disc-type-filter.jpeg.asset.json";
+
+const ball = ballAsset.url;
+const foot = footAsset.url;
+const taps = tapAsset.url;
+const filters = filterAsset.url;
+const union = unionImg;
 
 export const Route = createFileRoute("/products")({
   head: () => ({
