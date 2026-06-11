@@ -5,12 +5,9 @@ import hero from "@/assets/hero-valves.jpg";
 import ballAsset from "@/assets/pvc-ball-valve.jpeg.asset.json";
 import footAsset from "@/assets/pvc-foot-valve.jpeg.asset.json";
 import tapAsset from "@/assets/two-way-angle-tap.jpeg.asset.json";
-import filterAsset from "@/assets/disc-type-filter.jpeg.asset.json";
-
 const ball = ballAsset.url;
 const foot = footAsset.url;
 const taps = tapAsset.url;
-const filters = filterAsset.url;
 
 export const Route = createFileRoute("/")({
   head: () => ({
