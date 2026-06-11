@@ -1,0 +1,193 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import ball from "@/assets/ball-valves.jpg";
+import foot from "@/assets/foot-valves.jpg";
+import taps from "@/assets/taps.jpg";
+import union from "@/assets/union-valves.jpg";
+import filters from "@/assets/filters.jpg";
+
+export const Route = createFileRoute("/products")({
+  head: () => ({
+    meta: [
+      { title: "PVC Ball Valves, Taps & Irrigation Filters in Coimbatore | COVAIMETALS" },
+      { name: "description", content: "Shop PVC & UPVC ball valves, check valves, foot valves, union fittings, taps and irrigation filters in Coimbatore. All sizes in stock at COVAIMETALS, Ganapathy." },
+      { property: "og:title", content: "Our Products — PVC & UPVC Valves & Taps | COVAIMETALS" },
+      { property: "og:description", content: "All sizes of PVC & UPVC valves, taps and irrigation fittings in stock at our Ganapathy store." },
+      { property: "og:url", content: "/products" },
+    ],
+    links: [{ rel: "canonical", href: "/products" }],
+  }),
+  component: Products,
+});
+
+const sizes = {
+  ballStd: ["½″", "¾″", "1″", "1¼″", "1½″", "2″"],
+  ballHeavy: ["2½″", "3″", "4″", "5″", "6″"],
+  union: ["½″", "¾″", "1″", "1¼″", "1½″", "2″", "2½″", "3″", "4″"],
+  filter: ["1″", "1½″", "2″"],
+};
+
+function SizeChips({ items }: { items: string[] }) {
+  return (
+    <div className="mt-3 flex flex-wrap gap-2">
+      {items.map((s) => (
+        <span key={s} className="rounded-md border border-border bg-muted/60 px-2.5 py-1 text-xs font-semibold text-foreground/80">{s}</span>
+      ))}
+    </div>
+  );
+}
+
+function Product({ title, desc, sizes }: { title: string; desc: string; sizes?: string[] }) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-6 transition hover:border-primary/40 hover:shadow-elegant">
+      <h3 className="font-display text-xl tracking-wide text-foreground">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{desc}</p>
+      {sizes && <SizeChips items={sizes} />}
+    </div>
+  );
+}
+
+function Category({ id, eyebrow, title, intro, image, children }: {
+  id: string; eyebrow: string; title: string; intro: string; image: string; children: React.ReactNode;
+}) {
+  return (
+    <section id={id} className="scroll-mt-24 py-16 md:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-start gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">{eyebrow}</p>
+            <h2 className="mt-3 font-display text-3xl leading-tight tracking-wide md:text-4xl">{title}</h2>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">{intro}</p>
+            <div className="mt-6 overflow-hidden rounded-xl border border-border">
+              <img src={image} alt={title} loading="lazy" width={1200} height={900} className="aspect-[4/3] w-full object-cover" />
+            </div>
+          </div>
+          <div className="grid gap-5 lg:col-span-7 md:grid-cols-2">{children}</div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const tapList = [
+  ["Short body tap", "Compact bib tap for wall or pipe mounting. Common in home water supply lines."],
+  ["Long body tap", "Extended body for wall-recessed pipes. Clean finish for home and commercial use."],
+  ["Angle tap", "90° outlet — used where pipe runs horizontally into a wall-mounted fitting."],
+  ["Two-way tap", "Two outlets from one inlet. Splits water flow to two points — useful in agriculture and home."],
+  ["Two-way angle tap", "Two outlets at 90°. Compact split for tight spaces and multi-line irrigation setups."],
+  ["Machine tap", "Heavy-duty tap for industrial equipment water supply. Durable handle and body."],
+  ["Garden hose tap", "Threaded nozzle outlet for hose attachment. Garden, farm, and outdoor use."],
+  ["Pillar cock", "Upright tap for basin mounting. Common in kitchens and washbasins."],
+  ["Stop cock", "In-line isolating valve for water supply lines. Quarter-turn shutoff for plumbing maintenance."],
+  ["Float valve", "Auto-shuts when tank is full. Used in overhead tanks, sumps, and storage systems."],
+  ["Angle cock", "Compact 90° shutoff valve for toilet flush connections and basin inlets."],
+  ["Shower tap", "Wall-mount tap with shower arm outlet. Simple on/off flow for bathroom showers."],
+  ["Sink cock — wall mount", "Wall-mounted tap for kitchen and utility sinks. Long spout, wall connection."],
+  ["Sink cock — basin mount", "Deck-mounted tap for sink and basin installation. Fits standard hole sizes."],
+  ["Short sink cock — wall mount", "Compact wall-mount version for smaller sinks and tight spaces."],
+  ["Short sink cock — basin mount", "Short-spout deck-mount tap. Ideal for small hand-wash basins."],
+] as const;
+
+function Products() {
+  return (
+    <>
+      <section className="bg-secondary text-secondary-foreground">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">Our Products</p>
+          <h1 className="mt-3 font-display text-4xl leading-tight tracking-wide text-white md:text-5xl lg:text-6xl">
+            PVC &amp; UPVC valves, taps, and irrigation fittings in Coimbatore
+          </h1>
+          <p className="mt-4 max-w-3xl text-secondary-foreground/80">
+            Every category below is in stock at our Ganapathy store. Tap a category to jump straight to the products.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-2">
+            {[
+              ["ball-valves", "Ball valves"],
+              ["foot-check", "Foot & check valves"],
+              ["union", "Union ball valves"],
+              ["taps", "Taps"],
+              ["filters", "Irrigation filters"],
+            ].map(([id, label]) => (
+              <a key={id} href={`#${id}`} className="rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white hover:bg-white/10">{label}</a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <Category
+        id="ball-valves"
+        eyebrow="Category 1"
+        title="PVC & UPVC ball valves — all sizes in stock"
+        intro="COVAIMETALS stocks PVC and UPVC ball valves in a full range of sizes for agriculture, irrigation, plumbing and industrial use. Quarter-turn shutoff, leak-free sealing and long service life — suitable for water lines, drip systems and borewell connections across Coimbatore and Tamil Nadu."
+        image={ball}
+      >
+        <Product title="PVC ball valve — standard" desc="Standard PVC ball valve with quarter-turn lever handle. Ideal for irrigation mainlines, water supply, and agriculture pipelines. Lightweight, corrosion-free, and easy to operate." sizes={sizes.ballStd} />
+        <Product title="Heavy PVC ball valve — heavy duty" desc="Heavy-duty PVC ball valve for large-diameter industrial and agricultural pipelines. Thick-wall construction rated for higher pressure. Used in pumping stations, canal outlets and bulk water transfer." sizes={sizes.ballHeavy} />
+        <Product title="UPVC ball valve" desc="UPVC ball valve for hot and cold water systems, chemical lines, and pressure-rated pipelines. Higher rigidity than standard PVC — preferred for overhead water tanks, pumping systems and long-run water mains." sizes={sizes.ballStd} />
+      </Category>
+
+      <div className="bg-muted/40">
+        <Category
+          id="foot-check"
+          eyebrow="Category 2"
+          title="Foot valves & check valves for pumps and borewells"
+          intro="PVC foot valves and check valves designed for borewell suction lines, sump pumps and irrigation pump systems. Foot valves keep your pump primed and prevent dry running. Check valves stop backflow in discharge pipes — protecting motors and saving power."
+          image={foot}
+        >
+          <Product title="PVC foot valve with strainer" desc="Installed at suction inlet. Keeps pump primed. SS strainer prevents debris entry. For borewell and open-well pumps." />
+          <Product title="PVC check valve (non-return)" desc="Prevents water flowing back when pump stops. Swing or spring type. Protects pump motor from reverse rotation." />
+        </Category>
+      </div>
+
+      <Category
+        id="union"
+        eyebrow="Category 3"
+        title="Union ball valves & double union ball valves — ½″ to 4″"
+        intro="Union and double union ball valves allow easy removal and replacement without cutting the pipeline. Available in PVC and UPVC from ½″ to 4″ — used in pump connections, filter assemblies, chemical dosing lines, and any system where regular maintenance is needed."
+        image={union}
+      >
+        <Product title="Union ball valve" desc="Single union end for easy disconnection. Quarter-turn shutoff. Ideal for pump inlet/outlet connections." sizes={sizes.union} />
+        <Product title="Double union ball valve" desc="Both ends unscrew independently. Full isolation and removal without disturbing the pipeline. Used in filter and equipment assemblies." sizes={sizes.union} />
+      </Category>
+
+      <div className="bg-muted/40">
+        <Category
+          id="taps"
+          eyebrow="Category 4"
+          title="PVC & UPVC taps for home, agriculture, and plumbing"
+          intro="COVAIMETALS stocks the widest range of PVC and UPVC taps in Coimbatore — for kitchens, bathrooms, gardens, agriculture and industrial plumbing. From basic bib cocks to two-way taps and pillar cocks, every type is available in our Ganapathy store."
+          image={taps}
+        >
+          {tapList.map(([t, d]) => (
+            <Product key={t} title={t} desc={d} />
+          ))}
+        </Category>
+      </div>
+
+      <Category
+        id="filters"
+        eyebrow="Category 5"
+        title="Irrigation filters — disc type and screen type, 1″ to 2″"
+        intro="Irrigation filters for drip and sprinkler systems — disc type and screen type from 1″ to 2″. Filters protect emitters and nozzles from sand, algae and debris, extending the life of your entire drip system. Suitable for borewell, canal and tank water sources."
+        image={filters}
+      >
+        <Product title="Disc type irrigation filter" desc="Stacked disc filtration — excellent for high-debris water sources like canals and open wells. Easy to clean by backwashing." sizes={["1″", "2″"]} />
+        <Product title="Screen type irrigation filter" desc="Woven mesh screen for borewell and clean water sources. Simple cartridge design — remove and rinse to clean." sizes={["1″", "2″"]} />
+        <div className="md:col-span-2">
+          <div className="rounded-xl border border-dashed border-border bg-muted/30 p-5 text-sm text-muted-foreground">
+            Available sizes: <span className="font-semibold text-foreground">{sizes.filter.join("  ·  ")}</span>
+          </div>
+        </div>
+      </Category>
+
+      <section className="bg-secondary text-secondary-foreground">
+        <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+          <div>
+            <h2 className="font-display text-3xl tracking-wide md:text-4xl">Can't find a size? Need a bulk quote?</h2>
+            <p className="mt-2 text-secondary-foreground/75">Message us — we usually reply within an hour.</p>
+          </div>
+          <Link to="/contact" className="rounded-md bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary/90">Contact us</Link>
+        </div>
+      </section>
+    </>
+  );
+}
