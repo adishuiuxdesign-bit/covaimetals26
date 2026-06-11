@@ -118,7 +118,7 @@ function Index() {
                 { img: ball, title: "Ball Valves", desc: "PVC & UPVC, ½″ to 6″" },
                 { img: foot, title: "Foot & Check Valves", desc: "For borewell & sump pumps" },
                 { img: taps, title: "Taps & Cocks", desc: "Pillar, angle, garden & more" },
-                { img: hero, title: "Union Fittings", desc: "Easy maintenance, all sizes" },
+                { img: union, title: "Union Fittings", desc: "Easy maintenance, all sizes" },
               ].map((c) => (
                 <Link key={c.title} to="/products" className="group relative overflow-hidden rounded-xl border border-border bg-card transition hover:shadow-elegant">
                   <div className="aspect-[4/3] overflow-hidden bg-white">
