@@ -4,12 +4,28 @@ import footAsset from "@/assets/pvc-foot-valve.jpeg.asset.json";
 import tapAsset from "@/assets/two-way-angle-tap.jpeg.asset.json";
 import filterAsset from "@/assets/disc-type-filter.jpeg.asset.json";
 import unionAsset from "@/assets/union-ball-valve.jpeg.asset.json";
+import heavyBallAsset from "@/assets/Heavy_PVC_Ball_Valve.jpeg.asset.json";
+import upvcBallAsset from "@/assets/UPVC_Ball_Valve.jpeg.asset.json";
+import doubleUnionAsset from "@/assets/Double_Union.jpeg.asset.json";
+import floatValveAsset from "@/assets/Float_valve.jpeg.asset.json";
+import gardenTapAsset from "@/assets/Garden_hose_tap.jpeg.asset.json";
+import longTapAsset from "@/assets/Long_body_tap.jpeg.asset.json";
+import machineTapAsset from "@/assets/Machine_tap.jpeg.asset.json";
+import pillarCockAsset from "@/assets/Pillar_cock.jpeg.asset.json";
 
 const ball = ballAsset.url;
 const foot = footAsset.url;
 const taps = tapAsset.url;
 const filters = filterAsset.url;
 const union = unionAsset.url;
+const heavyBall = heavyBallAsset.url;
+const upvcBall = upvcBallAsset.url;
+const doubleUnion = doubleUnionAsset.url;
+const floatValve = floatValveAsset.url;
+const gardenTap = gardenTapAsset.url;
+const longTap = longTapAsset.url;
+const machineTap = machineTapAsset.url;
+const pillarCock = pillarCockAsset.url;
 
 export const Route = createFileRoute("/products")({
   head: () => ({
@@ -42,12 +58,19 @@ function SizeChips({ items }: { items: string[] }) {
   );
 }
 
-function Product({ title, desc, sizes }: { title: string; desc: string; sizes?: string[] }) {
+function Product({ title, desc, sizes, image }: { title: string; desc: string; sizes?: string[]; image?: string }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-6 transition hover:border-primary/40 hover:shadow-elegant">
-      <h3 className="font-display text-xl tracking-wide text-foreground">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{desc}</p>
-      {sizes && <SizeChips items={sizes} />}
+    <div className="overflow-hidden rounded-xl border border-border bg-card transition hover:border-primary/40 hover:shadow-elegant">
+      {image && (
+        <div className="aspect-[4/3] w-full overflow-hidden bg-muted/40">
+          <img src={image} alt={title} loading="lazy" width={800} height={600} className="h-full w-full object-contain p-4" />
+        </div>
+      )}
+      <div className="p-6">
+        <h3 className="font-display text-xl tracking-wide text-foreground">{title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{desc}</p>
+        {sizes && <SizeChips items={sizes} />}
+      </div>
     </div>
   );
 }
@@ -74,24 +97,24 @@ function Category({ id, eyebrow, title, intro, image, children }: {
   );
 }
 
-const tapList = [
-  ["Short body tap", "Compact bib tap for wall or pipe mounting. Common in home water supply lines."],
-  ["Long body tap", "Extended body for wall-recessed pipes. Clean finish for home and commercial use."],
-  ["Angle tap", "90° outlet — used where pipe runs horizontally into a wall-mounted fitting."],
-  ["Two-way tap", "Two outlets from one inlet. Splits water flow to two points — useful in agriculture and home."],
-  ["Two-way angle tap", "Two outlets at 90°. Compact split for tight spaces and multi-line irrigation setups."],
-  ["Machine tap", "Heavy-duty tap for industrial equipment water supply. Durable handle and body."],
-  ["Garden hose tap", "Threaded nozzle outlet for hose attachment. Garden, farm, and outdoor use."],
-  ["Pillar cock", "Upright tap for basin mounting. Common in kitchens and washbasins."],
-  ["Stop cock", "In-line isolating valve for water supply lines. Quarter-turn shutoff for plumbing maintenance."],
-  ["Float valve", "Auto-shuts when tank is full. Used in overhead tanks, sumps, and storage systems."],
-  ["Angle cock", "Compact 90° shutoff valve for toilet flush connections and basin inlets."],
-  ["Shower tap", "Wall-mount tap with shower arm outlet. Simple on/off flow for bathroom showers."],
-  ["Sink cock — wall mount", "Wall-mounted tap for kitchen and utility sinks. Long spout, wall connection."],
-  ["Sink cock — basin mount", "Deck-mounted tap for sink and basin installation. Fits standard hole sizes."],
-  ["Short sink cock — wall mount", "Compact wall-mount version for smaller sinks and tight spaces."],
-  ["Short sink cock — basin mount", "Short-spout deck-mount tap. Ideal for small hand-wash basins."],
-] as const;
+const tapList: Array<[string, string, string?]> = [
+  ["Short body tap", "Compact bib tap for wall or pipe mounting. Common in home water supply lines.", longTap],
+  ["Long body tap", "Extended body for wall-recessed pipes. Clean finish for home and commercial use.", longTap],
+  ["Angle tap", "90° outlet — used where pipe runs horizontally into a wall-mounted fitting.", taps],
+  ["Two-way tap", "Two outlets from one inlet. Splits water flow to two points — useful in agriculture and home.", taps],
+  ["Two-way angle tap", "Two outlets at 90°. Compact split for tight spaces and multi-line irrigation setups.", taps],
+  ["Machine tap", "Heavy-duty tap for industrial equipment water supply. Durable handle and body.", machineTap],
+  ["Garden hose tap", "Threaded nozzle outlet for hose attachment. Garden, farm, and outdoor use.", gardenTap],
+  ["Pillar cock", "Upright tap for basin mounting. Common in kitchens and washbasins.", pillarCock],
+  ["Stop cock", "In-line isolating valve for water supply lines. Quarter-turn shutoff for plumbing maintenance.", gardenTap],
+  ["Float valve", "Auto-shuts when tank is full. Used in overhead tanks, sumps, and storage systems.", floatValve],
+  ["Angle cock", "Compact 90° shutoff valve for toilet flush connections and basin inlets.", gardenTap],
+  ["Shower tap", "Wall-mount tap with shower arm outlet. Simple on/off flow for bathroom showers.", longTap],
+  ["Sink cock — wall mount", "Wall-mounted tap for kitchen and utility sinks. Long spout, wall connection.", longTap],
+  ["Sink cock — basin mount", "Deck-mounted tap for sink and basin installation. Fits standard hole sizes.", pillarCock],
+  ["Short sink cock — wall mount", "Compact wall-mount version for smaller sinks and tight spaces.", gardenTap],
+  ["Short sink cock — basin mount", "Short-spout deck-mount tap. Ideal for small hand-wash basins.", pillarCock],
+];
 
 function Products() {
   return (
@@ -126,9 +149,9 @@ function Products() {
         intro="COVAIMETALS stocks PVC and UPVC ball valves in a full range of sizes for agriculture, irrigation, plumbing and industrial use. Quarter-turn shutoff, leak-free sealing and long service life — suitable for water lines, drip systems and borewell connections across Coimbatore and Tamil Nadu."
         image={ball}
       >
-        <Product title="PVC ball valve — standard" desc="Standard PVC ball valve with quarter-turn lever handle. Ideal for irrigation mainlines, water supply, and agriculture pipelines. Lightweight, corrosion-free, and easy to operate." sizes={sizes.ballStd} />
-        <Product title="Heavy PVC ball valve — heavy duty" desc="Heavy-duty PVC ball valve for large-diameter industrial and agricultural pipelines. Thick-wall construction rated for higher pressure. Used in pumping stations, canal outlets and bulk water transfer." sizes={sizes.ballHeavy} />
-        <Product title="UPVC ball valve" desc="UPVC ball valve for hot and cold water systems, chemical lines, and pressure-rated pipelines. Higher rigidity than standard PVC — preferred for overhead water tanks, pumping systems and long-run water mains." sizes={sizes.ballStd} />
+        <Product image={ball} title="PVC ball valve — standard" desc="Standard PVC ball valve with quarter-turn lever handle. Ideal for irrigation mainlines, water supply, and agriculture pipelines. Lightweight, corrosion-free, and easy to operate." sizes={sizes.ballStd} />
+        <Product image={heavyBall} title="Heavy PVC ball valve — heavy duty" desc="Heavy-duty PVC ball valve for large-diameter industrial and agricultural pipelines. Thick-wall construction rated for higher pressure. Used in pumping stations, canal outlets and bulk water transfer." sizes={sizes.ballHeavy} />
+        <Product image={upvcBall} title="UPVC ball valve" desc="UPVC ball valve for hot and cold water systems, chemical lines, and pressure-rated pipelines. Higher rigidity than standard PVC — preferred for overhead water tanks, pumping systems and long-run water mains." sizes={sizes.ballStd} />
       </Category>
 
       <div className="bg-muted/40">
@@ -139,8 +162,8 @@ function Products() {
           intro="PVC foot valves and check valves designed for borewell suction lines, sump pumps and irrigation pump systems. Foot valves keep your pump primed and prevent dry running. Check valves stop backflow in discharge pipes — protecting motors and saving power."
           image={foot}
         >
-          <Product title="PVC foot valve with strainer" desc="Installed at suction inlet. Keeps pump primed. SS strainer prevents debris entry. For borewell and open-well pumps." />
-          <Product title="PVC check valve (non-return)" desc="Prevents water flowing back when pump stops. Swing or spring type. Protects pump motor from reverse rotation." />
+          <Product image={foot} title="PVC foot valve with strainer" desc="Installed at suction inlet. Keeps pump primed. SS strainer prevents debris entry. For borewell and open-well pumps." />
+          <Product image={foot} title="PVC check valve (non-return)" desc="Prevents water flowing back when pump stops. Swing or spring type. Protects pump motor from reverse rotation." />
         </Category>
       </div>
 
@@ -151,8 +174,8 @@ function Products() {
         intro="Union and double union ball valves allow easy removal and replacement without cutting the pipeline. Available in PVC and UPVC from ½″ to 4″ — used in pump connections, filter assemblies, chemical dosing lines, and any system where regular maintenance is needed."
         image={union}
       >
-        <Product title="Union ball valve" desc="Single union end for easy disconnection. Quarter-turn shutoff. Ideal for pump inlet/outlet connections." sizes={sizes.union} />
-        <Product title="Double union ball valve" desc="Both ends unscrew independently. Full isolation and removal without disturbing the pipeline. Used in filter and equipment assemblies." sizes={sizes.union} />
+        <Product image={union} title="Union ball valve" desc="Single union end for easy disconnection. Quarter-turn shutoff. Ideal for pump inlet/outlet connections." sizes={sizes.union} />
+        <Product image={doubleUnion} title="Double union ball valve" desc="Both ends unscrew independently. Full isolation and removal without disturbing the pipeline. Used in filter and equipment assemblies." sizes={sizes.union} />
       </Category>
 
       <div className="bg-muted/40">
@@ -163,8 +186,8 @@ function Products() {
           intro="COVAIMETALS stocks the widest range of PVC and UPVC taps in Coimbatore — for kitchens, bathrooms, gardens, agriculture and industrial plumbing. From basic bib cocks to two-way taps and pillar cocks, every type is available in our Ganapathy store."
           image={taps}
         >
-          {tapList.map(([t, d]) => (
-            <Product key={t} title={t} desc={d} />
+          {tapList.map(([t, d, img]) => (
+            <Product key={t} image={img} title={t} desc={d} />
           ))}
         </Category>
       </div>
@@ -176,8 +199,8 @@ function Products() {
         intro="Irrigation filters for drip and sprinkler systems — disc type and screen type from 1″ to 2″. Filters protect emitters and nozzles from sand, algae and debris, extending the life of your entire drip system. Suitable for borewell, canal and tank water sources."
         image={filters}
       >
-        <Product title="Disc type irrigation filter" desc="Stacked disc filtration — excellent for high-debris water sources like canals and open wells. Easy to clean by backwashing." sizes={["1″", "2″"]} />
-        <Product title="Screen type irrigation filter" desc="Woven mesh screen for borewell and clean water sources. Simple cartridge design — remove and rinse to clean." sizes={["1″", "2″"]} />
+        <Product image={filters} title="Disc type irrigation filter" desc="Stacked disc filtration — excellent for high-debris water sources like canals and open wells. Easy to clean by backwashing." sizes={["1″", "2″"]} />
+        <Product image={filters} title="Screen type irrigation filter" desc="Woven mesh screen for borewell and clean water sources. Simple cartridge design — remove and rinse to clean." sizes={["1″", "2″"]} />
         <div className="md:col-span-2">
           <div className="rounded-xl border border-dashed border-border bg-muted/30 p-5 text-sm text-muted-foreground">
             Available sizes: <span className="font-semibold text-foreground">{sizes.filter.join("  ·  ")}</span>
