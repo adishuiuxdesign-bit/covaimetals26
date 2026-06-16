@@ -12,6 +12,10 @@ import gardenTapAsset from "@/assets/Garden_hose_tap.jpeg.asset.json";
 import longTapAsset from "@/assets/Long_body_tap.jpeg.asset.json";
 import machineTapAsset from "@/assets/Machine_tap.jpeg.asset.json";
 import pillarCockAsset from "@/assets/Pillar_cock.jpeg.asset.json";
+import checkValveAsset from "@/assets/PVC_Check_Valve.jpeg.asset.json";
+import sinkBasinAsset from "@/assets/Sink_cock_basin.jpeg.asset.json";
+import sinkWallAsset from "@/assets/Sink_cock_wall.jpeg.asset.json";
+import showerAsset from "@/assets/Shower.jpeg.asset.json";
 
 const ball = ballAsset.url;
 const foot = footAsset.url;
@@ -26,6 +30,10 @@ const gardenTap = gardenTapAsset.url;
 const longTap = longTapAsset.url;
 const machineTap = machineTapAsset.url;
 const pillarCock = pillarCockAsset.url;
+const checkValve = checkValveAsset.url;
+const sinkBasin = sinkBasinAsset.url;
+const sinkWall = sinkWallAsset.url;
+const shower = showerAsset.url;
 
 export const Route = createFileRoute("/products")({
   head: () => ({
@@ -109,11 +117,11 @@ const tapList: Array<[string, string, string?]> = [
   ["Stop cock", "In-line isolating valve for water supply lines. Quarter-turn shutoff for plumbing maintenance.", gardenTap],
   ["Float valve", "Auto-shuts when tank is full. Used in overhead tanks, sumps, and storage systems.", floatValve],
   ["Angle cock", "Compact 90° shutoff valve for toilet flush connections and basin inlets.", gardenTap],
-  ["Shower tap", "Wall-mount tap with shower arm outlet. Simple on/off flow for bathroom showers.", longTap],
-  ["Sink cock — wall mount", "Wall-mounted tap for kitchen and utility sinks. Long spout, wall connection.", longTap],
-  ["Sink cock — basin mount", "Deck-mounted tap for sink and basin installation. Fits standard hole sizes.", pillarCock],
-  ["Short sink cock — wall mount", "Compact wall-mount version for smaller sinks and tight spaces.", gardenTap],
-  ["Short sink cock — basin mount", "Short-spout deck-mount tap. Ideal for small hand-wash basins.", pillarCock],
+  ["Shower", "Wall-mount shower head with arm. Even spray pattern for bathroom showers.", shower],
+  ["Sink cock — wall mount", "Wall-mounted tap for kitchen and utility sinks. Long spout, wall connection.", sinkWall],
+  ["Sink cock — basin mount", "Deck-mounted tap for sink and basin installation. Fits standard hole sizes.", sinkBasin],
+  ["Short sink cock — wall mount", "Compact wall-mount version for smaller sinks and tight spaces.", sinkWall],
+  ["Short sink cock — basin mount", "Short-spout deck-mount tap. Ideal for small hand-wash basins.", sinkBasin],
 ];
 
 function Products() {
@@ -163,7 +171,7 @@ function Products() {
           image={foot}
         >
           <Product image={foot} title="PVC foot valve with strainer" desc="Installed at suction inlet. Keeps pump primed. SS strainer prevents debris entry. For borewell and open-well pumps." />
-          <Product image={foot} title="PVC check valve (non-return)" desc="Prevents water flowing back when pump stops. Swing or spring type. Protects pump motor from reverse rotation." />
+          <Product image={checkValve} title="PVC check valve (non-return)" desc="Prevents water flowing back when pump stops. Swing or spring type. Protects pump motor from reverse rotation." />
         </Category>
       </div>
 
