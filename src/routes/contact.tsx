@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { Mail, MapPin, Phone, MessageCircle, CheckCircle2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { SITE } from "@/lib/site";
+import { submitInquiry } from "@/lib/inquiries.functions";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -28,10 +30,12 @@ const schema = z.object({
 function Contact() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const saveInquiry = useServerFn(submitInquiry);
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const data = Object.fromEntries(fd) as Record<string, string>;
     const parsed = schema.safeParse(data);
     if (!parsed.success) {
@@ -41,10 +45,17 @@ function Contact() {
       return;
     }
     setErrors({});
+
+    try {
+      await saveInquiry({ data: { name: parsed.data.name, phone: parsed.data.phone, email: parsed.data.email ?? "", message: parsed.data.message } });
+    } catch (err) {
+      console.error("Failed to save inquiry", err);
+    }
+
     const msg = `Hi Covai Metals,%0A%0AName: ${encodeURIComponent(parsed.data.name)}%0APhone: ${encodeURIComponent(parsed.data.phone)}%0A${parsed.data.email ? `Email: ${encodeURIComponent(parsed.data.email)}%0A` : ""}%0A${encodeURIComponent(parsed.data.message)}`;
     window.open(`https://wa.me/${SITE.whatsapp}?text=${msg}`, "_blank", "noopener");
     setSent(true);
-    (e.target as HTMLFormElement).reset();
+    form.reset();
   }
 
   return (
