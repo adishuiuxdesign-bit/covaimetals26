@@ -88,7 +88,7 @@ function Contact() {
             <div className="overflow-hidden rounded-xl border border-border">
               <iframe
                 title="Covai Metals — Ganapathy, Coimbatore"
-                src="https://www.google.com/maps?q=Raja+Nagar+Ganapathy+Coimbatore&output=embed"
+                src="https://www.google.com/maps?q=covai+metals+apaxx,Ganapathy,Coimbatore&output=embed"
                 className="h-64 w-full"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
