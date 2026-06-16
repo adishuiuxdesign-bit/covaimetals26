@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { Mail, MapPin, Phone, MessageCircle, CheckCircle2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { SITE } from "@/lib/site";
+import { submitInquiry } from "@/lib/inquiries.functions";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
