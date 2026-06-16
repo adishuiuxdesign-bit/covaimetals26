@@ -16,6 +16,9 @@ import checkValveAsset from "@/assets/PVC_Check_Valve.jpeg.asset.json";
 import sinkBasinAsset from "@/assets/Sink_cock_basin.jpeg.asset.json";
 import sinkWallAsset from "@/assets/Sink_cock_wall.jpeg.asset.json";
 import showerAsset from "@/assets/Shower.jpeg.asset.json";
+import angleTapAsset from "@/assets/Angle_tap.jpeg.asset.json";
+import stopCockAsset from "@/assets/Stop_cock.jpeg.asset.json";
+import screenTypeAsset from "@/assets/Screen_Type.jpeg.asset.json";
 
 const ball = ballAsset.url;
 const foot = footAsset.url;
@@ -34,6 +37,9 @@ const checkValve = checkValveAsset.url;
 const sinkBasin = sinkBasinAsset.url;
 const sinkWall = sinkWallAsset.url;
 const shower = showerAsset.url;
+const angleTap = angleTapAsset.url;
+const stopCock = stopCockAsset.url;
+const screenType = screenTypeAsset.url;
 
 export const Route = createFileRoute("/products")({
   head: () => ({
@@ -108,15 +114,14 @@ function Category({ id, eyebrow, title, intro, image, children }: {
 const tapList: Array<[string, string, string?]> = [
   ["Short body tap", "Compact bib tap for wall or pipe mounting. Common in home water supply lines.", longTap],
   ["Long body tap", "Extended body for wall-recessed pipes. Clean finish for home and commercial use.", longTap],
-  ["Angle tap", "90° outlet — used where pipe runs horizontally into a wall-mounted fitting.", taps],
+  ["Angle tap", "90° outlet — used where pipe runs horizontally into a wall-mounted fitting.", angleTap],
   ["Two-way tap", "Two outlets from one inlet. Splits water flow to two points — useful in agriculture and home.", taps],
   ["Two-way angle tap", "Two outlets at 90°. Compact split for tight spaces and multi-line irrigation setups.", taps],
   ["Machine tap", "Heavy-duty tap for industrial equipment water supply. Durable handle and body.", machineTap],
   ["Garden hose tap", "Threaded nozzle outlet for hose attachment. Garden, farm, and outdoor use.", gardenTap],
   ["Pillar cock", "Upright tap for basin mounting. Common in kitchens and washbasins.", pillarCock],
-  ["Stop cock", "In-line isolating valve for water supply lines. Quarter-turn shutoff for plumbing maintenance.", gardenTap],
+  ["Stop cock", "In-line isolating valve for water supply lines. Quarter-turn shutoff for plumbing maintenance.", stopCock],
   ["Float valve", "Auto-shuts when tank is full. Used in overhead tanks, sumps, and storage systems.", floatValve],
-  ["Angle cock", "Compact 90° shutoff valve for toilet flush connections and basin inlets.", gardenTap],
   ["Shower", "Wall-mount shower head with arm. Even spray pattern for bathroom showers.", shower],
   ["Sink cock — wall mount", "Wall-mounted tap for kitchen and utility sinks. Long spout, wall connection.", sinkWall],
   ["Sink cock — basin mount", "Deck-mounted tap for sink and basin installation. Fits standard hole sizes.", sinkBasin],
@@ -208,7 +213,7 @@ function Products() {
         image={filters}
       >
         <Product image={filters} title="Disc type irrigation filter" desc="Stacked disc filtration — excellent for high-debris water sources like canals and open wells. Easy to clean by backwashing." sizes={["1″", "2″"]} />
-        <Product image={filters} title="Screen type irrigation filter" desc="Woven mesh screen for borewell and clean water sources. Simple cartridge design — remove and rinse to clean." sizes={["1″", "2″"]} />
+        <Product image={screenType} title="Screen type irrigation filter" desc="Woven mesh screen for borewell and clean water sources. Simple cartridge design — remove and rinse to clean." sizes={["1″", "2″"]} />
         <div className="md:col-span-2">
           <div className="rounded-xl border border-dashed border-border bg-muted/30 p-5 text-sm text-muted-foreground">
             Available sizes: <span className="font-semibold text-foreground">{sizes.filter.join("  ·  ")}</span>
