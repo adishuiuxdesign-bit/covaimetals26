@@ -1,10 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Droplets, Factory, ShieldCheck, Wrench } from "lucide-react";
-import { useState } from "react";
-import { z } from "zod";
-import { useServerFn } from "@tanstack/react-start";
-import { submitQuote } from "@/lib/inquiries.functions";
 import heroAsset from "@/assets/hero-banner.jpeg.asset.json";
 const hero = heroAsset.url;
 import ballAsset from "@/assets/pvc-ball-valve.jpeg.asset.json";
