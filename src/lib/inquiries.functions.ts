@@ -25,10 +25,13 @@ export const submitInquiry = createServerFn({ method: "POST" })
       throw new Error("Inquiry storage is not configured");
     }
 
-    const range = `${sheetName}!A:E`;
+    const range = `${sheetName}!A:F`;
     const url = `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
 
-    const timestamp = new Date().toISOString();
+    const now = new Date();
+    const tz = "Asia/Kolkata";
+    const date = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
+    const time = new Intl.DateTimeFormat("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).format(now);
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -37,7 +40,7 @@ export const submitInquiry = createServerFn({ method: "POST" })
         "X-Connection-Api-Key": sheetsKey,
       },
       body: JSON.stringify({
-        values: [[timestamp, data.name, data.phone, data.email ?? "", data.message]],
+        values: [[date, time, data.name, data.phone, data.email ?? "", data.message]],
       }),
     });
 
