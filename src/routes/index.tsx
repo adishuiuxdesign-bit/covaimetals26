@@ -26,45 +26,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const quoteSchema = z.object({
-  name: z.string().trim().min(2, "Please enter your name").max(100),
-  phone: z.string().trim().min(7, "Enter a valid phone number").max(20),
-  email: z.string().trim().email("Enter a valid email").max(255).optional().or(z.literal("")),
-  message: z.string().trim().min(5, "Tell us a bit more").max(1000),
-});
-
 function Index() {
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [sent, setSent] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const saveQuote = useServerFn(submitQuote);
-
-  async function onQuoteSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const fd = new FormData(form);
-    const data = Object.fromEntries(fd) as Record<string, string>;
-    const parsed = quoteSchema.safeParse(data);
-    if (!parsed.success) {
-      const errs: Record<string, string> = {};
-      for (const i of parsed.error.issues) errs[i.path[0] as string] = i.message;
-      setErrors(errs);
-      return;
-    }
-    setErrors({});
-    setSubmitting(true);
-    try {
-      await saveQuote({ data: { name: parsed.data.name, phone: parsed.data.phone, email: parsed.data.email ?? "", message: parsed.data.message } });
-      setSent(true);
-      form.reset();
-    } catch (err) {
-      console.error("Failed to save quote", err);
-      setErrors({ message: "Couldn't send right now. Please try again or WhatsApp us." });
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
   return (
     <>
       {/* Hero */}
