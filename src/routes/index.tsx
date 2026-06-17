@@ -1,6 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Droplets, Factory, ShieldCheck, Wrench } from "lucide-react";
+import { useState } from "react";
+import { z } from "zod";
+import { useServerFn } from "@tanstack/react-start";
+import { submitQuote } from "@/lib/inquiries.functions";
 import heroAsset from "@/assets/hero-banner.jpeg.asset.json";
 const hero = heroAsset.url;
 import ballAsset from "@/assets/pvc-ball-valve.jpeg.asset.json";
@@ -26,7 +30,45 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const quoteSchema = z.object({
+  name: z.string().trim().min(2, "Please enter your name").max(100),
+  phone: z.string().trim().min(7, "Enter a valid phone number").max(20),
+  email: z.string().trim().email("Enter a valid email").max(255).optional().or(z.literal("")),
+  message: z.string().trim().min(5, "Tell us a bit more").max(1000),
+});
+
 function Index() {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const saveQuote = useServerFn(submitQuote);
+
+  async function onQuoteSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const data = Object.fromEntries(fd) as Record<string, string>;
+    const parsed = quoteSchema.safeParse(data);
+    if (!parsed.success) {
+      const errs: Record<string, string> = {};
+      for (const i of parsed.error.issues) errs[i.path[0] as string] = i.message;
+      setErrors(errs);
+      return;
+    }
+    setErrors({});
+    setSubmitting(true);
+    try {
+      await saveQuote({ data: { name: parsed.data.name, phone: parsed.data.phone, email: parsed.data.email ?? "", message: parsed.data.message } });
+      setSent(true);
+      form.reset();
+    } catch (err) {
+      console.error("Failed to save quote", err);
+      setErrors({ message: "Couldn't send right now. Please try again or WhatsApp us." });
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <>
       {/* Hero */}
@@ -159,16 +201,56 @@ function Index() {
 
       {/* CTA */}
       <section className="bg-secondary text-secondary-foreground">
-        <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-4 py-16 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+        <div id="quote" className="mx-auto grid max-w-7xl gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div>
-            <h2 className="font-display text-3xl tracking-wide md:text-4xl">Need a bulk quote for your project?</h2>
-            <p className="mt-2 text-secondary-foreground/75">Tell us your sizes and quantities — we'll get back the same day.</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">Request a quote</p>
+            <h2 className="mt-3 font-display text-3xl tracking-wide text-white md:text-4xl">Need a bulk quote for your project?</h2>
+            <p className="mt-3 text-secondary-foreground/75">Tell us your sizes and quantities — we'll get back the same day. Your request is saved and reviewed by our team.</p>
+            <ul className="mt-6 space-y-2 text-sm text-secondary-foreground/85">
+              <li className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" /> Same-day reply on working days</li>
+              <li className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" /> Best pricing on bulk orders</li>
+              <li className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" /> All sizes from ½″ to 6″ in stock</li>
+            </ul>
           </div>
-          <Link to="/contact" className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wider text-primary-foreground transition hover:bg-primary/90">
-            Request a quote <ArrowRight className="h-4 w-4" />
-          </Link>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur md:p-8">
+            {sent ? (
+              <div className="flex items-start gap-2 rounded-lg border border-primary/40 bg-primary/10 p-4 text-sm text-white">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" />
+                Thanks — your quote request has been received. We'll get back to you shortly.
+              </div>
+            ) : (
+              <form className="grid gap-4" onSubmit={onQuoteSubmit} noValidate>
+                <QField label="Your name" name="name" error={errors.name} required />
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <QField label="Phone" name="phone" error={errors.phone} required type="tel" />
+                  <QField label="Email (optional)" name="email" error={errors.email} type="email" />
+                </div>
+                <QField label="What do you need?" name="message" error={errors.message} required textarea placeholder="e.g. 50 nos. of 1″ UPVC ball valves" />
+                <button type="submit" disabled={submitting} className="mt-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wider text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60">
+                  {submitting ? "Sending…" : "Request quote"}
+                </button>
+              </form>
+            )}
+          </div>
         </div>
       </section>
     </>
+  );
+}
+
+function QField({ label, name, error, required, textarea, type = "text", placeholder }: {
+  label: string; name: string; error?: string; required?: boolean; textarea?: boolean; type?: string; placeholder?: string;
+}) {
+  const cls = "mt-1 w-full rounded-md border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-white/40 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30";
+  return (
+    <label className="block">
+      <span className="text-sm font-semibold text-white">{label}{required && <span className="text-primary"> *</span>}</span>
+      {textarea ? (
+        <textarea name={name} rows={4} placeholder={placeholder} className={cls} />
+      ) : (
+        <input name={name} type={type} placeholder={placeholder} className={cls} />
+      )}
+      {error && <span className="mt-1 block text-xs text-primary">{error}</span>}
+    </label>
   );
 }
