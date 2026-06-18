@@ -2,67 +2,62 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 const inquirySchema = z.object({
+  type: z.string().trim().min(1).max(40).default("contact"),
   name: z.string().trim().min(1).max(100),
   phone: z.string().trim().min(1).max(40),
   email: z.string().trim().max(255).optional().default(""),
   message: z.string().trim().min(1).max(2000),
+  state: z.string().trim().max(100).optional().default(""),
+  district: z.string().trim().max(100).optional().default(""),
 });
 
-async function appendToSheet(sheetName: string, row: string[]) {
-    const lovableKey = process.env.LOVABLE_API_KEY;
-    const sheetsKey = process.env.GOOGLE_SHEETS_API_KEY;
-    const spreadsheetId = process.env.INQUIRIES_SPREADSHEET_ID;
-
-    if (!lovableKey || !sheetsKey || !spreadsheetId) {
-      console.error("Sheet storage not configured", {
-        hasLovable: !!lovableKey,
-        hasSheets: !!sheetsKey,
-        hasSpreadsheet: !!spreadsheetId,
-      });
-      throw new Error("Sheet storage is not configured");
-    }
-
-    const range = `${sheetName}!A:F`;
-    const url = `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
-
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${lovableKey}`,
-        "X-Connection-Api-Key": sheetsKey,
-      },
-      body: JSON.stringify({ values: [row] }),
-    });
-
-    if (!res.ok) {
-      const body = await res.text();
-      console.error("Google Sheets append failed", res.status, body);
-      throw new Error("Failed to save to sheet");
-    }
-}
-
-function nowDateTime() {
-  const now = new Date();
-  const tz = "Asia/Kolkata";
-  const date = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
-  const time = new Intl.DateTimeFormat("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).format(now);
-  return { date, time };
+async function postToWebhook(payload: Record<string, string>) {
+  const url = process.env.GAS_WEBHOOK_URL;
+  if (!url) {
+    console.error("GAS_WEBHOOK_URL not configured");
+    throw new Error("Webhook not configured");
+  }
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+    redirect: "follow",
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    console.error("GAS webhook failed", res.status, body);
+    throw new Error("Failed to submit");
+  }
 }
 
 export const submitInquiry = createServerFn({ method: "POST" })
   .inputValidator((input) => inquirySchema.parse(input))
   .handler(async ({ data }) => {
-    const sheetName = process.env.INQUIRIES_SHEET_NAME || "Sheet1";
-    const { date, time } = nowDateTime();
-    await appendToSheet(sheetName, [date, time, data.name, data.phone, data.email ?? "", data.message]);
+    await postToWebhook({
+      type: data.type || "contact",
+      name: data.name,
+      phone: data.phone,
+      email: data.email ?? "",
+      message: data.message,
+      state: data.state ?? "",
+      district: data.district ?? "",
+      created_at: new Date().toISOString(),
+    });
     return { ok: true };
   });
 
 export const submitQuote = createServerFn({ method: "POST" })
   .inputValidator((input) => inquirySchema.parse(input))
   .handler(async ({ data }) => {
-    const { date, time } = nowDateTime();
-    await appendToSheet("Quotes", [date, time, data.name, data.phone, data.email ?? "", data.message]);
+    await postToWebhook({
+      type: data.type || "quote",
+      name: data.name,
+      phone: data.phone,
+      email: data.email ?? "",
+      message: data.message,
+      state: data.state ?? "",
+      district: data.district ?? "",
+      created_at: new Date().toISOString(),
+    });
     return { ok: true };
   });
