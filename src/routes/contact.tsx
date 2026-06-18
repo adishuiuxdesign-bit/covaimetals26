@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { z } from "zod";
 import { Mail, MapPin, Phone, MessageCircle, CheckCircle2 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { SITE } from "@/lib/site";
 import { submitInquiry } from "@/lib/inquiries.functions";
+import statesData from "@/data/states-districts.json";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -24,13 +25,25 @@ const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(100),
   phone: z.string().trim().min(7, "Enter a valid phone number").max(20),
   email: z.string().trim().email("Enter a valid email").max(255).optional().or(z.literal("")),
+  state: z.string().trim().min(1, "Select your state"),
+  district: z.string().trim().min(1, "Select your district"),
   message: z.string().trim().min(5, "Tell us a bit more").max(1000),
 });
+
+type StatesFile = { states: { state: string; districts: string[] }[] };
+const STATES = (statesData as StatesFile).states;
 
 function Contact() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [selectedState, setSelectedState] = useState("");
   const saveInquiry = useServerFn(submitInquiry);
+
+  const districts = useMemo(
+    () => STATES.find((s) => s.state === selectedState)?.districts ?? [],
+    [selectedState],
+  );
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -45,17 +58,29 @@ function Contact() {
       return;
     }
     setErrors({});
+    setSubmitting(true);
 
     try {
-      await saveInquiry({ data: { name: parsed.data.name, phone: parsed.data.phone, email: parsed.data.email ?? "", message: parsed.data.message } });
+      await saveInquiry({
+        data: {
+          type: "contact",
+          name: parsed.data.name,
+          phone: parsed.data.phone,
+          email: parsed.data.email ?? "",
+          message: parsed.data.message,
+          state: parsed.data.state,
+          district: parsed.data.district,
+        },
+      });
+      setSent(true);
+      form.reset();
+      setSelectedState("");
     } catch (err) {
       console.error("Failed to save inquiry", err);
+      setErrors({ message: "Something went wrong. Please try again or WhatsApp us." });
+    } finally {
+      setSubmitting(false);
     }
-
-    const msg = `Hi Covai Metals,%0A%0AName: ${encodeURIComponent(parsed.data.name)}%0APhone: ${encodeURIComponent(parsed.data.phone)}%0A${parsed.data.email ? `Email: ${encodeURIComponent(parsed.data.email)}%0A` : ""}%0A${encodeURIComponent(parsed.data.message)}`;
-    window.open(`https://wa.me/${SITE.whatsapp}?text=${msg}`, "_blank", "noopener");
-    setSent(true);
-    form.reset();
   }
 
   return (
@@ -115,7 +140,7 @@ function Contact() {
               {sent && (
                 <div className="mt-5 flex items-start gap-2 rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm text-foreground">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" />
-                  Thanks — we've opened WhatsApp so you can send your message.
+                  Thanks — your enquiry has been received. We'll get back to you soon.
                 </div>
               )}
 
@@ -125,11 +150,49 @@ function Contact() {
                   <Field label="Phone" name="phone" error={errors.phone} required type="tel" />
                   <Field label="Email (optional)" name="email" error={errors.email} type="email" />
                 </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="text-sm font-semibold text-foreground">State<span className="text-primary"> *</span></span>
+                    <select
+                      name="state"
+                      value={selectedState}
+                      onChange={(e) => setSelectedState(e.target.value)}
+                      className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+                    >
+                      <option value="">Select state</option>
+                      {STATES.map((s) => (
+                        <option key={s.state} value={s.state}>{s.state}</option>
+                      ))}
+                    </select>
+                    {errors.state && <span className="mt-1 block text-xs text-primary">{errors.state}</span>}
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-semibold text-foreground">District<span className="text-primary"> *</span></span>
+                    <select
+                      name="district"
+                      disabled={!selectedState}
+                      className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      <option value="">{selectedState ? "Select district" : "Select state first"}</option>
+                      {districts.map((d) => (
+                        <option key={d} value={d}>{d}</option>
+                      ))}
+                    </select>
+                    {errors.district && <span className="mt-1 block text-xs text-primary">{errors.district}</span>}
+                  </label>
+                </div>
                 <Field label="What do you need?" name="message" error={errors.message} required textarea placeholder="e.g. 50 nos. of 1″ UPVC ball valves and 10 nos. of 2″ foot valves" />
-                <button type="submit" className="mt-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wider text-primary-foreground transition hover:bg-primary/90">
-                  Send via WhatsApp
+                <button type="submit" disabled={submitting} className="mt-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wider text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60">
+                  {submitting ? "Sending..." : "Send enquiry"}
                 </button>
-                <p className="text-xs text-muted-foreground">By submitting, you'll be redirected to WhatsApp to send your enquiry.</p>
+                <a
+                  href={`https://wa.me/${SITE.whatsapp}`}
+                  target="_blank"
+                  rel="noopener"
+                  className="text-xs text-muted-foreground hover:text-primary"
+                >
+                  Prefer WhatsApp? Message us directly →
+                </a>
               </form>
             </div>
           </div>
