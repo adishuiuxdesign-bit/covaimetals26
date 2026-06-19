@@ -24,6 +24,19 @@ function sheetRange(sheetName: string) {
   return `'${escaped}'!A:I`;
 }
 
+async function getSheetName(spreadsheetId: string, headers: HeadersInit) {
+  const configured = process.env.INQUIRIES_SHEET_NAME;
+  const res = await fetch(`https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${spreadsheetId}`, {
+    headers,
+  });
+  if (!res.ok) return configured || "Sheet1";
+
+  const data = await res.json() as { sheets?: { properties?: { title?: string } }[] };
+  const names = data.sheets?.map((sheet) => sheet.properties?.title).filter(Boolean) as string[] | undefined;
+  if (configured && names?.includes(configured)) return configured;
+  return names?.[0] || configured || "Sheet1";
+}
+
 async function appendToSheet(payload: InquiryPayload) {
   const spreadsheetId = process.env.INQUIRIES_SPREADSHEET_ID
     ? spreadsheetIdFromSecret(process.env.INQUIRIES_SPREADSHEET_ID)
@@ -37,16 +50,18 @@ async function appendToSheet(payload: InquiryPayload) {
     throw new Error("Lead sheet is not configured");
   }
 
+  const headers = {
+    Authorization: `Bearer ${lovableKey}`,
+    "X-Connection-Api-Key": connectionKey,
+    "Content-Type": "application/json",
+  };
+  const sheetName = await getSheetName(spreadsheetId, headers);
   const range = sheetRange(sheetName);
   const res = await fetch(
     `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=USER_ENTERED`,
     {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${lovableKey}`,
-        "X-Connection-Api-Key": connectionKey,
-        "Content-Type": "application/json",
-      },
+      headers,
       body: JSON.stringify({
         values: [[
           payload.created_at,
