@@ -18,6 +18,12 @@ function spreadsheetIdFromSecret(value: string) {
   return match?.[1] ?? value;
 }
 
+// Prevent spreadsheet formula injection: prefix dangerous leading chars with a single quote.
+function sanitizeCell(value: string) {
+  if (!value) return "";
+  return /^[=+\-@|%]/.test(value) ? `'${value}` : value;
+}
+
 function sheetRange(sheetName: string) {
   if (/^[A-Za-z0-9_]+$/.test(sheetName)) return `${sheetName}!A:I`;
   const escaped = sheetName.replace(/'/g, "''");
@@ -83,20 +89,20 @@ async function appendToSheet(payload: InquiryPayload) {
   }
 
   const res = await fetch(
-    `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=USER_ENTERED`,
+    `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=RAW`,
     {
       method: "POST",
       headers,
       body: JSON.stringify({
         values: [[
           payload.created_at,
-          payload.type,
-          payload.name,
-          payload.phone,
-          payload.email,
-          payload.state,
-          payload.district,
-          payload.message,
+          sanitizeCell(payload.type),
+          sanitizeCell(payload.name),
+          sanitizeCell(payload.phone),
+          sanitizeCell(payload.email),
+          sanitizeCell(payload.state),
+          sanitizeCell(payload.district),
+          sanitizeCell(payload.message),
           "website",
         ]],
       }),
