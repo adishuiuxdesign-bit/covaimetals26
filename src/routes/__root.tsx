@@ -92,6 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Coimbatore's trusted supplier of PVC & UPVC ball valves, taps, foot valves, check valves and union fittings for agriculture, irrigation and plumbing." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9d31c779-d244-4bce-84ce-16f42e5a6a97/id-preview-c53f7dc2--1ab97d54-2eff-4f1b-9aa0-adfc830c17b5.lovable.app-1781850514358.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9d31c779-d244-4bce-84ce-16f42e5a6a97/id-preview-c53f7dc2--1ab97d54-2eff-4f1b-9aa0-adfc830c17b5.lovable.app-1781850514358.png" },
+      { name: "google-site-verification", content: "69rVuDEW2JwziwJSdohdsgnjb7diYdS3hsA391yxpu8" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
