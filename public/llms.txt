@@ -1,0 +1,17 @@
+# COVAIMETALS
+
+> COVAIMETALS is a Coimbatore-based supplier of PVC & UPVC ball valves, taps, foot valves, check valves, union fittings and irrigation filters for agriculture, irrigation and plumbing.
+
+Walk-in store in Raja Nagar, Ganapathy, Coimbatore, Tamil Nadu. Phone / WhatsApp: +91 63747 97270.
+
+## Pages
+
+- [Home](/): Overview of the business, featured product categories and contact details.
+- [Products](/products): Full catalog — PVC & UPVC ball valves, heavy PVC valves, foot & check valves, union & double union valves, taps, and drip-irrigation filters with sizes.
+- [About](/about): Company story, specialisation and who we serve.
+- [Contact](/contact): Store address, phone, WhatsApp and inquiry form.
+- [Privacy](/privacy): Privacy policy.
+
+## Optional
+
+- [Sitemap](/sitemap.xml): Machine-readable list of public URLs.

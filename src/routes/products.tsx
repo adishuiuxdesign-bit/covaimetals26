@@ -48,13 +48,30 @@ const teflonTape = teflonTapeAsset.url;
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: [
-      { title: "PVC Ball Valves, Taps & Irrigation Filters in Coimbatore | COVAIMETALS" },
+      { title: "PVC & UPVC Valves, Taps & Filters | COVAIMETALS" },
       { name: "description", content: "Shop PVC & UPVC ball valves, check valves, foot valves, union fittings, taps and irrigation filters in Coimbatore. All sizes in stock at COVAIMETALS, Ganapathy." },
-      { property: "og:title", content: "Our Products — PVC & UPVC Valves & Taps | COVAIMETALS" },
-      { property: "og:description", content: "All sizes of PVC & UPVC valves, taps and irrigation fittings in stock at our Ganapathy store." },
-      { property: "og:url", content: "/products" },
+      { property: "og:title", content: "Full product range — ball valves, foot valves, taps, filters & unions" },
+      { property: "og:description", content: "Every size from ½″ to 6″ in stock: PVC & UPVC ball valves, heavy PVC valves, foot & check valves, union & double union valves, taps and drip-irrigation filters." },
+      { property: "og:url", content: "https://covaimetals.com/products" },
     ],
-    links: [{ rel: "canonical", href: "/products" }],
+    links: [{ rel: "canonical", href: "https://covaimetals.com/products" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "COVAIMETALS product categories",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "PVC & UPVC ball valves", url: "https://covaimetals.com/products#ball-valves" },
+            { "@type": "ListItem", position: 2, name: "Foot valves & check valves", url: "https://covaimetals.com/products#foot-check" },
+            { "@type": "ListItem", position: 3, name: "Union & double union ball valves", url: "https://covaimetals.com/products#union" },
+            { "@type": "ListItem", position: 4, name: "PVC & UPVC taps", url: "https://covaimetals.com/products#taps" },
+            { "@type": "ListItem", position: 5, name: "Irrigation filters", url: "https://covaimetals.com/products#filters" },
+          ],
+        }),
+      },
+    ],
   }),
   component: Products,
 });

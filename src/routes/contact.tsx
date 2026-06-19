@@ -10,13 +10,13 @@ import statesData from "@/data/states-districts.json";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact COVAIMETALS — PVC Valve Supplier in Coimbatore" },
+      { title: "Contact COVAIMETALS — Visit, Call or WhatsApp" },
       { name: "description", content: "Visit, call or WhatsApp COVAIMETALS in Raja Nagar, Ganapathy, Coimbatore for PVC & UPVC ball valves, taps, foot valves and pipe fittings." },
-      { property: "og:title", content: "Contact COVAIMETALS — Coimbatore" },
-      { property: "og:description", content: "Reach our Ganapathy store for valves, taps and pipe fittings." },
-      { property: "og:url", content: "/contact" },
+      { property: "og:title", content: "Reach COVAIMETALS — Ganapathy store, phone & WhatsApp" },
+      { property: "og:description", content: "Send us your size list for a same-day quote, or visit our Raja Nagar, Ganapathy showroom for valves, taps & irrigation fittings." },
+      { property: "og:url", content: "https://covaimetals.com/contact" },
     ],
-    links: [{ rel: "canonical", href: "/contact" }],
+    links: [{ rel: "canonical", href: "https://covaimetals.com/contact" }],
   }),
   component: Contact,
 });

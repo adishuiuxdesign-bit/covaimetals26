@@ -5,13 +5,13 @@ import hero from "@/assets/hero-valves.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About COVAIMETALS — PVC Valve Supplier in Ganapathy, Coimbatore" },
+      { title: "About COVAIMETALS — Ganapathy, Coimbatore" },
       { name: "description", content: "Learn about COVAIMETALS — a specialist supplier of PVC & UPVC ball valves, taps and fittings serving farmers, plumbers and contractors across Coimbatore." },
-      { property: "og:title", content: "About COVAIMETALS — Coimbatore" },
-      { property: "og:description", content: "Specialist PVC & UPVC valve supplier based in Raja Nagar, Ganapathy, Coimbatore." },
-      { property: "og:url", content: "/about" },
+      { property: "og:title", content: "Our story — a Ganapathy valve specialist serving Coimbatore" },
+      { property: "og:description", content: "How COVAIMETALS became Coimbatore's go-to store for PVC & UPVC ball valves, taps and irrigation fittings — and who we serve." },
+      { property: "og:url", content: "https://covaimetals.com/about" },
     ],
-    links: [{ rel: "canonical", href: "/about" }],
+    links: [{ rel: "canonical", href: "https://covaimetals.com/about" }],
   }),
   component: About,
 });
