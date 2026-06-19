@@ -20,6 +20,7 @@ export function SiteFooter() {
             <li><Link to="/about" className="hover:text-primary">About</Link></li>
             <li><Link to="/products" className="hover:text-primary">Products</Link></li>
             <li><Link to="/contact" className="hover:text-primary">Contact</Link></li>
+            <li><Link to="/privacy" className="hover:text-primary">Privacy & Trust</Link></li>
           </ul>
         </div>
         <div>
