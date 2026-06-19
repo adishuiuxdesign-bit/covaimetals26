@@ -13,13 +13,20 @@ const inquirySchema = z.object({
 
 type InquiryPayload = z.infer<typeof inquirySchema> & { created_at: string };
 
+function spreadsheetIdFromSecret(value: string) {
+  const match = value.match(/\/spreadsheets\/d\/([^/]+)/);
+  return match?.[1] ?? value;
+}
+
 function sheetRange(sheetName: string) {
   const escaped = sheetName.replace(/'/g, "''");
   return `'${escaped}'!A:I`;
 }
 
 async function appendToSheet(payload: InquiryPayload) {
-  const spreadsheetId = process.env.INQUIRIES_SPREADSHEET_ID;
+  const spreadsheetId = process.env.INQUIRIES_SPREADSHEET_ID
+    ? spreadsheetIdFromSecret(process.env.INQUIRIES_SPREADSHEET_ID)
+    : undefined;
   const sheetName = process.env.INQUIRIES_SHEET_NAME || "Sheet1";
   const connectionKey = process.env.GOOGLE_SHEETS_API_KEY;
   const lovableKey = process.env.LOVABLE_API_KEY;
