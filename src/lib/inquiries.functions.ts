@@ -19,6 +19,7 @@ function spreadsheetIdFromSecret(value: string) {
 }
 
 function sheetRange(sheetName: string) {
+  if (/^[A-Za-z0-9_]+$/.test(sheetName)) return `${sheetName}!A:I`;
   const escaped = sheetName.replace(/'/g, "''");
   return `'${escaped}'!A:I`;
 }
