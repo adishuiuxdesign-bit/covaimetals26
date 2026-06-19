@@ -18,6 +18,12 @@ function spreadsheetIdFromSecret(value: string) {
   return match?.[1] ?? value;
 }
 
+// Prevent spreadsheet formula injection: prefix dangerous leading chars with a single quote.
+function sanitizeCell(value: string) {
+  if (!value) return "";
+  return /^[=+\-@|%]/.test(value) ? `'${value}` : value;
+}
+
 function sheetRange(sheetName: string) {
   if (/^[A-Za-z0-9_]+$/.test(sheetName)) return `${sheetName}!A:I`;
   const escaped = sheetName.replace(/'/g, "''");
