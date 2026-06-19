@@ -56,6 +56,32 @@ async function appendToSheet(payload: InquiryPayload) {
   };
   const sheetName = await getSheetName(spreadsheetId, headers);
   const range = sheetRange(sheetName);
+
+  // Duplicate detection: skip if a row with same name+phone+message already exists.
+  try {
+    const existing = await fetch(
+      `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${spreadsheetId}/values/${range}`,
+      { headers },
+    );
+    if (existing.ok) {
+      const data = (await existing.json()) as { values?: string[][] };
+      const rows = data.values ?? [];
+      const norm = (s: string) => (s ?? "").trim().toLowerCase();
+      const dup = rows.some(
+        (r) =>
+          norm(r[2]) === norm(payload.name) &&
+          norm(r[3]) === norm(payload.phone) &&
+          norm(r[7]) === norm(payload.message),
+      );
+      if (dup) {
+        console.log("Duplicate inquiry detected — skipping append");
+        return { duplicate: true };
+      }
+    }
+  } catch (err) {
+    console.warn("Duplicate check failed, proceeding with append", err);
+  }
+
   const res = await fetch(
     `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=USER_ENTERED`,
     {
@@ -82,6 +108,7 @@ async function appendToSheet(payload: InquiryPayload) {
     console.error("Google Sheets append failed", res.status, body);
     throw new Error("Failed to save lead");
   }
+  return { duplicate: false };
 }
 
 async function postToWebhook(payload: Record<string, string>) {
@@ -134,7 +161,9 @@ export const submitQuote = createServerFn({ method: "POST" })
       district: data.district ?? "",
       created_at: new Date().toISOString(),
     };
-    await appendToSheet(payload);
-    await postToWebhook(payload).catch((err) => console.warn("GAS webhook backup failed", err));
+    const result = await appendToSheet(payload);
+    if (!result.duplicate) {
+      await postToWebhook(payload).catch((err) => console.warn("GAS webhook backup failed", err));
+    }
     return { ok: true };
   });
