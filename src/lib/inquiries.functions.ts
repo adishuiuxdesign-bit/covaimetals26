@@ -143,9 +143,11 @@ export const submitInquiry = createServerFn({ method: "POST" })
       district: data.district ?? "",
       created_at: new Date().toISOString(),
     };
-    await appendToSheet(payload);
-    await postToWebhook(payload).catch((err) => console.warn("GAS webhook backup failed", err));
-    return { ok: true };
+    const result = await appendToSheet(payload);
+    if (!result.duplicate) {
+      await postToWebhook(payload).catch((err) => console.warn("GAS webhook backup failed", err));
+    }
+    return { ok: true, duplicate: result.duplicate };
   });
 
 export const submitQuote = createServerFn({ method: "POST" })
