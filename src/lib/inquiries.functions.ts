@@ -41,7 +41,6 @@ async function appendToSheet(payload: InquiryPayload) {
   const spreadsheetId = process.env.INQUIRIES_SPREADSHEET_ID
     ? spreadsheetIdFromSecret(process.env.INQUIRIES_SPREADSHEET_ID)
     : undefined;
-  const sheetName = process.env.INQUIRIES_SHEET_NAME || "Sheet1";
   const connectionKey = process.env.GOOGLE_SHEETS_API_KEY;
   const lovableKey = process.env.LOVABLE_API_KEY;
 
