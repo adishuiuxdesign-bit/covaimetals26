@@ -19,6 +19,8 @@ import showerAsset from "@/assets/Shower.jpeg.asset.json";
 import angleTapAsset from "@/assets/Angle_tap.jpeg.asset.json";
 import stopCockAsset from "@/assets/Stop_cock.jpeg.asset.json";
 import screenTypeAsset from "@/assets/Screen_Type.jpeg.asset.json";
+import flapFootAsset from "@/assets/FLAP_Foot_valve.jpeg.asset.json";
+import teflonTapeAsset from "@/assets/Teflon_tape.jpeg.asset.json";
 
 const ball = ballAsset.url;
 const foot = footAsset.url;
@@ -40,6 +42,8 @@ const shower = showerAsset.url;
 const angleTap = angleTapAsset.url;
 const stopCock = stopCockAsset.url;
 const screenType = screenTypeAsset.url;
+const flapFoot = flapFootAsset.url;
+const teflonTape = teflonTapeAsset.url;
 
 export const Route = createFileRoute("/products")({
   head: () => ({
@@ -57,9 +61,10 @@ export const Route = createFileRoute("/products")({
 
 const sizes = {
   ballStd: ["½″", "¾″", "1″", "1¼″", "1½″", "2″"],
-  ballHeavy: ["2½″", "3″", "4″", "5″", "6″"],
+  ballHeavy: ["2½″", "3″", "4″", "6″"],
+  upvcBall: ["½″", "¾″", "1″", "1¼″", "1½″", "2″", "2½″", "3″", "4″"],
   union: ["½″", "¾″", "1″", "1¼″", "1½″", "2″", "2½″", "3″", "4″"],
-  filter: ["1″", "1½″", "2″"],
+  filter: ["1″", "1¼″", "1½″", "2″"],
 };
 
 function SizeChips({ items }: { items: string[] }) {
@@ -127,6 +132,7 @@ const tapList: Array<[string, string, string?]> = [
   ["Sink cock — basin mount", "Deck-mounted tap for sink and basin installation. Fits standard hole sizes.", sinkBasin],
   ["Short sink cock — wall mount", "Compact wall-mount version for smaller sinks and tight spaces.", sinkWall],
   ["Short sink cock — basin mount", "Short-spout deck-mount tap. Ideal for small hand-wash basins.", sinkBasin],
+  ["Teflon tape (PTFE thread seal)", "PTFE thread seal tape for leak-proof threaded pipe joints. 10 meter roll — essential for plumbing and fittings.", teflonTape],
 ];
 
 function Products() {
@@ -164,7 +170,7 @@ function Products() {
       >
         <Product image={ball} title="PVC ball valve — standard" desc="Standard PVC ball valve with quarter-turn lever handle. Ideal for irrigation mainlines, water supply, and agriculture pipelines. Lightweight, corrosion-free, and easy to operate." sizes={sizes.ballStd} />
         <Product image={heavyBall} title="Heavy PVC ball valve — heavy duty" desc="Heavy-duty PVC ball valve for large-diameter industrial and agricultural pipelines. Thick-wall construction rated for higher pressure. Used in pumping stations, canal outlets and bulk water transfer." sizes={sizes.ballHeavy} />
-        <Product image={upvcBall} title="UPVC ball valve" desc="UPVC ball valve for hot and cold water systems, chemical lines, and pressure-rated pipelines. Higher rigidity than standard PVC — preferred for overhead water tanks, pumping systems and long-run water mains." sizes={sizes.ballStd} />
+        <Product image={upvcBall} title="UPVC ball valve" desc="UPVC ball valve for hot and cold water systems, chemical lines, and pressure-rated pipelines. Higher rigidity than standard PVC — preferred for overhead water tanks, pumping systems and long-run water mains." sizes={sizes.upvcBall} />
       </Category>
 
       <div className="bg-muted/40">
@@ -176,6 +182,7 @@ function Products() {
           image={foot}
         >
           <Product image={foot} title="PVC foot valve with strainer" desc="Installed at suction inlet. Keeps pump primed. SS strainer prevents debris entry. For borewell and open-well pumps." />
+          <Product image={flapFoot} title="Flap foot valve" desc="Flap-type PVC foot valve with SS mesh strainer dome. Keeps pump primed and prevents debris entry. Ideal for open wells, sumps, and irrigation suction lines." />
           <Product image={checkValve} title="PVC check valve (non-return)" desc="Prevents water flowing back when pump stops. Swing or spring type. Protects pump motor from reverse rotation." />
         </Category>
       </div>
@@ -212,8 +219,8 @@ function Products() {
         intro="Irrigation filters for drip and sprinkler systems — disc type and screen type from 1″ to 2″. Filters protect emitters and nozzles from sand, algae and debris, extending the life of your entire drip system. Suitable for borewell, canal and tank water sources."
         image={filters}
       >
-        <Product image={filters} title="Disc type irrigation filter" desc="Stacked disc filtration — excellent for high-debris water sources like canals and open wells. Easy to clean by backwashing." sizes={["1″", "2″"]} />
-        <Product image={screenType} title="Screen type irrigation filter" desc="Woven mesh screen for borewell and clean water sources. Simple cartridge design — remove and rinse to clean." sizes={["1″", "2″"]} />
+        <Product image={filters} title="Disc type irrigation filter" desc="Stacked disc filtration — excellent for high-debris water sources like canals and open wells. Easy to clean by backwashing." sizes={sizes.filter} />
+        <Product image={screenType} title="Screen type irrigation filter" desc="Woven mesh screen for borewell and clean water sources. Simple cartridge design — remove and rinse to clean." sizes={sizes.filter} />
         <div className="md:col-span-2">
           <div className="rounded-xl border border-dashed border-border bg-muted/30 p-5 text-sm text-muted-foreground">
             Available sizes: <span className="font-semibold text-foreground">{sizes.filter.join("  ·  ")}</span>
