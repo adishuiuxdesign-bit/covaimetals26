@@ -11,6 +11,57 @@ const inquirySchema = z.object({
   district: z.string().trim().max(100).optional().default(""),
 });
 
+type InquiryPayload = z.infer<typeof inquirySchema> & { created_at: string };
+
+function sheetRange(sheetName: string) {
+  const escaped = sheetName.replace(/'/g, "''");
+  return `'${escaped}'!A:I`;
+}
+
+async function appendToSheet(payload: InquiryPayload) {
+  const spreadsheetId = process.env.INQUIRIES_SPREADSHEET_ID;
+  const sheetName = process.env.INQUIRIES_SHEET_NAME || "Sheet1";
+  const connectionKey = process.env.GOOGLE_SHEETS_API_KEY;
+  const lovableKey = process.env.LOVABLE_API_KEY;
+
+  if (!spreadsheetId || !connectionKey || !lovableKey) {
+    console.error("Google Sheets connector is not fully configured");
+    throw new Error("Lead sheet is not configured");
+  }
+
+  const range = sheetRange(sheetName);
+  const res = await fetch(
+    `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=USER_ENTERED`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": connectionKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        values: [[
+          payload.created_at,
+          payload.type,
+          payload.name,
+          payload.phone,
+          payload.email,
+          payload.state,
+          payload.district,
+          payload.message,
+          "website",
+        ]],
+      }),
+    },
+  );
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error("Google Sheets append failed", res.status, body);
+    throw new Error("Failed to save lead");
+  }
+}
+
 async function postToWebhook(payload: Record<string, string>) {
   const url = process.env.GAS_WEBHOOK_URL;
   if (!url) {
@@ -33,7 +84,7 @@ async function postToWebhook(payload: Record<string, string>) {
 export const submitInquiry = createServerFn({ method: "POST" })
   .inputValidator((input) => inquirySchema.parse(input))
   .handler(async ({ data }) => {
-    await postToWebhook({
+    const payload = {
       type: data.type || "contact",
       name: data.name,
       phone: data.phone,
@@ -42,14 +93,16 @@ export const submitInquiry = createServerFn({ method: "POST" })
       state: data.state ?? "",
       district: data.district ?? "",
       created_at: new Date().toISOString(),
-    });
+    };
+    await appendToSheet(payload);
+    await postToWebhook(payload).catch((err) => console.warn("GAS webhook backup failed", err));
     return { ok: true };
   });
 
 export const submitQuote = createServerFn({ method: "POST" })
   .inputValidator((input) => inquirySchema.parse(input))
   .handler(async ({ data }) => {
-    await postToWebhook({
+    const payload = {
       type: data.type || "quote",
       name: data.name,
       phone: data.phone,
@@ -58,6 +111,8 @@ export const submitQuote = createServerFn({ method: "POST" })
       state: data.state ?? "",
       district: data.district ?? "",
       created_at: new Date().toISOString(),
-    });
+    };
+    await appendToSheet(payload);
+    await postToWebhook(payload).catch((err) => console.warn("GAS webhook backup failed", err));
     return { ok: true };
   });
