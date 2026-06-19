@@ -15,13 +15,35 @@ const union = unionAsset.url;
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "COVAIMETALS — Ball Valves, Check Valves & Foot Valves in Coimbatore" },
+      { title: "PVC & UPVC Valves, Taps & Fittings | COVAIMETALS" },
       { name: "description", content: "Coimbatore's trusted supplier of PVC & UPVC ball valves, taps, foot valves, check valves and union fittings for agriculture, irrigation and plumbing." },
-      { property: "og:title", content: "COVAIMETALS — Ball Valves & Pipe Fittings, Coimbatore" },
-      { property: "og:description", content: "Quality PVC & UPVC valves and taps in all sizes — visit our Ganapathy store." },
-      { property: "og:url", content: "/" },
+      { property: "og:title", content: "COVAIMETALS — PVC & UPVC valves, taps & pipe fittings in Coimbatore" },
+      { property: "og:description", content: "Ball valves, foot valves, check valves, union fittings, taps & irrigation filters — every size in stock at our Ganapathy store. Walk in or WhatsApp for a quote." },
+      { property: "og:url", content: "https://covaimetals.com/" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://covaimetals.com/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "COVAIMETALS",
+          description: "Supplier of PVC & UPVC ball valves, taps, foot valves, check valves, union fittings and irrigation filters in Coimbatore.",
+          url: "https://covaimetals.com/",
+          telephone: "+91 63747 97270",
+          email: "covaimetals@gmail.com",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Raja Nagar, Ganapathy",
+            addressLocality: "Coimbatore",
+            addressRegion: "Tamil Nadu",
+            addressCountry: "IN",
+          },
+          areaServed: "Coimbatore",
+        }),
+      },
+    ],
   }),
   component: Index,
 });
