@@ -99,7 +99,7 @@ function Product({ title, desc, sizes, image }: { title: string; desc: string; s
     <div className="overflow-hidden rounded-xl border border-border bg-card transition hover:border-primary/40 hover:shadow-elegant">
       {image && (
         <div className="aspect-[4/3] w-full overflow-hidden bg-muted/40">
-          <img src={image} alt={title} loading="lazy" width={800} height={600} className="h-full w-full object-contain p-4" />
+          <img src={image} alt={title} loading="lazy" width={800} height={600} className="h-full w-full object-cover" />
         </div>
       )}
       <div className="p-6">
