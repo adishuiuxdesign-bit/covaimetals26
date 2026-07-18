@@ -144,8 +144,8 @@ function Index() {
                 { img: union, title: "Union Fittings", desc: "Easy maintenance, all sizes" },
               ].map((c) => (
                 <Link key={c.title} to="/products" className="group relative overflow-hidden rounded-xl border border-border bg-card transition hover:shadow-elegant">
-                  <div className="aspect-[4/3] overflow-hidden bg-white">
-                    <img src={c.img} alt={c.title} loading="lazy" width={600} height={450} className="h-full w-full object-contain p-4 transition duration-500 group-hover:scale-105" />
+                  <div className="aspect-square w-full overflow-hidden bg-white">
+                    <img src={c.img} alt={c.title} loading="lazy" width={800} height={800} className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105" />
                   </div>
                   <div className="p-5">
                     <h4 className="font-display text-xl tracking-wide">{c.title}</h4>
