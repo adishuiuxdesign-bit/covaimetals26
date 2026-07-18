@@ -98,8 +98,8 @@ function Product({ title, desc, sizes, image }: { title: string; desc: string; s
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card transition hover:border-primary/40 hover:shadow-elegant">
       {image && (
-        <div className="aspect-[4/3] w-full overflow-hidden bg-muted/40">
-          <img src={image} alt={title} loading="lazy" width={800} height={600} className="h-full w-full object-cover" />
+        <div className="aspect-square w-full overflow-hidden bg-white">
+          <img src={image} alt={title} loading="lazy" width={800} height={800} className="h-full w-full object-cover object-center" />
         </div>
       )}
       <div className="p-6">
@@ -123,7 +123,7 @@ function Category({ id, eyebrow, title, intro, image, children }: {
             <h2 className="mt-3 font-display text-3xl leading-tight tracking-wide md:text-4xl">{title}</h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground">{intro}</p>
             <div className="mt-6 overflow-hidden rounded-xl border border-border">
-              <img src={image} alt={title} loading="lazy" width={1200} height={900} className="aspect-[4/3] w-full object-cover" />
+              <img src={image} alt={title} loading="lazy" width={1200} height={900} className="aspect-[4/3] w-full object-cover object-center" />
             </div>
           </div>
           <div className="grid gap-5 lg:col-span-7 md:grid-cols-2">{children}</div>
